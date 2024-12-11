@@ -1,6 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
 
 public class BSTController {
   private BSTModel model;
@@ -10,47 +7,20 @@ public class BSTController {
     this.model = model;
     this.view = view;
 
-    view.getAddButton().addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        try {
-          int value = Integer.parseInt(view.getInputField().getText());
-          model.add(value);
-          updateView();
-        } catch (NumberFormatException ex) {
-          System.out.println("Invalid input!");
-        }
-      }
-    });
+    view.setModel(model);
+    model.setView(view);
 
-    view.getDeleteButton().addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        try {
-
-          int value = Integer.parseInt(view.getInputField().getText());
-
-//          if (e.getSource() == deleteButton) {
-//            model.add(value);
-//          } else {
-//            model.delete(value);
-//          }
-//          inputField.setText("");
-//          inputField.requestFocusInWindow();
-          model.delete(value);
-          updateView();
-        } catch (NumberFormatException ex) {
-          JOptionPane.showMessageDialog(null, "Please Enter Integer.");
-        }
-      }
-    });
+    view.getAddButton().addActionListener(view);
+    view.getDeleteButton().addActionListener(view);
+    view.getInputField().addKeyListener(view);
   }
 
-  private void updateView() {
-    String inorder = model.inorder();
-    String preorder = model.preorder();
-    String postorder = model.postorder();
-    view.updateTraversal(inorder, preorder, postorder);
+  public void add(int data) {
+    model.add(data);
+  }
+
+  public void delete(int data) {
+    model.delete(data);
   }
 }
 

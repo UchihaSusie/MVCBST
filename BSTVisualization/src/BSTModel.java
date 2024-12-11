@@ -1,46 +1,70 @@
 public class BSTModel {
   private Node root;
+  private BSTView view;
 
-  // Node class for tree structure
-  private static class Node {
-    int value;
-    Node left, right;
+  public void setView(BSTView view) {
+    this.view = view;
+  }
 
-    Node(int value) {
-      this.value = value;
+  private void notifyView() {
+    if (view != null) {
+      view.updateTreePanel(root);
+      view.updateTraversal(
+        inorder(),
+        preorder(),
+        postorder()
+      );
     }
   }
+
+  public Node getRoot() {
+    return root;
+}
 
   // Add node to the BST
   public boolean add(int value) {
+    if (contains(value)) {
+      return false;
+    }
+    
     if (root == null) {
       root = new Node(value);
+      notifyView();
       return true;
     }
-    return addRecursive(root, value);
+    
+    addRecursive(root, value);
+    notifyView();
+    return true;
   }
 
-  private boolean addRecursive(Node current, int value) {
-    if (value == current.value) return false; // Duplicate values not allowed
+  private void addRecursive(Node current, int value) {
     if (value < current.value) {
       if (current.left == null) {
         current.left = new Node(value);
-        return true;
+      } else {
+        addRecursive(current.left, value);
       }
-      return addRecursive(current.left, value);
     } else {
       if (current.right == null) {
         current.right = new Node(value);
-        return true;
+      } else {
+        addRecursive(current.right, value);
       }
-      return addRecursive(current.right, value);
     }
   }
 
-  // Delete a node
+  // Delete a node in the BST
   public boolean delete(int value) {
-    root = deleteRecursive(root, value);
-    return root != null;
+    if (root == null) return false;
+    
+    boolean nodeExists = contains(value);
+    if (nodeExists) {
+      root = deleteRecursive(root, value);
+      notifyView();
+      return true;
+    }
+    return false;
   }
 
   private Node deleteRecursive(Node current, int value) {
@@ -115,5 +139,22 @@ public class BSTModel {
       postorderTraversal(node.right, result);
       result.append(node.value).append(" ");
     }
+  }
+
+  //Check if contain when add and delete
+  private boolean contains(int value) {
+    return containsRecursive(root, value);
+  }
+
+  private boolean containsRecursive(Node current, int value) {
+    if (current == null) {
+      return false;
+    }
+    if (value == current.value) {
+      return true;
+    }
+    return value < current.value 
+        ? containsRecursive(current.left, value)
+        : containsRecursive(current.right, value);
   }
 }

@@ -2,9 +2,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JFrame;
+
 import javax.swing.*;
 import java.awt.*;
+
 
 public class BSTView extends JFrame implements ActionListener, KeyListener {
   private JTextField inputField;
@@ -12,28 +13,53 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
   private JLabel inorderLabel, preorderLabel, postorderLabel;
 
   private BSTModel model;
+  private TreePanel treePanel;
+
   public BSTView() {
+    treePanel = new TreePanel();  
     setTitle("Binary Search Tree Visualization");
     setSize(800, 600);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     initializeComponents();
+
+     // 添加事件监听器
+     addButton.addActionListener(this);
+     deleteButton.addActionListener(this);
+     inputField.addKeyListener(this);
   }
 
+  public void setModel(BSTModel model) {
+    this.model = model;
+  }
 
   @Override
   public void actionPerformed(ActionEvent evt) {
-    if (inputField.isEnabled()) {
+    if (!inputField.getText().trim().isEmpty()) {
       try {
         int data = Integer.parseInt(inputField.getText());
-        if (evt.getSource() == deleteButton) {
-          model.add(data);
-        } else {
-          model.delete(data);
+        if (evt.getSource() == addButton) {
+          if (!model.add(data)) {
+            JOptionPane.showMessageDialog(this, 
+                "Integer " + data + " already exists, please choose another one",
+                "Duplicate Value",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+          }
+        } else if (evt.getSource() == deleteButton) {
+          if (!model.delete(data)) {
+            JOptionPane.showMessageDialog(this, 
+                "Integer " + data + " does not exist in the tree",
+                "Value Not Found",
+                JOptionPane.INFORMATION_MESSAGE);
+          }
         }
         inputField.setText("");
         inputField.requestFocusInWindow();
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Please Enter Integer.");
+      } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Please enter a valid integer!",
+            "Invalid Input",
+            JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -41,37 +67,47 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
   @Override
   public void keyTyped(KeyEvent evt) {
     char c = evt.getKeyChar();
-    if (!inputField.isEnabled()) {
-      return;
-    } else if (c == 'a' || c == 'A' || c == '\n') {
-      try {
-        String data = inputField.getText();
-        evt.consume(); // Not type 'a' or 'A' character in textfield
-        if (!data.isEmpty()) {
-          model.add(Integer.parseInt(data));
-        } else {
-
-          throw new Exception();
+    if (c == '\n') {  // 回车键
+      if (!inputField.getText().trim().isEmpty()) {
+        try {
+          int data = Integer.parseInt(inputField.getText());
+          if (!model.add(data)) {
+            JOptionPane.showMessageDialog(this, 
+                "Integer " + data + " already exists, please choose another one",
+                "Duplicate Value",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+          }
+          inputField.setText("");
+        } catch (NumberFormatException e) {
+          JOptionPane.showMessageDialog(this, 
+              "Please enter a valid integer!",
+              "Invalid Input",
+              JOptionPane.ERROR_MESSAGE);
         }
-        inputField.requestFocusInWindow();
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Please Enter Integer.");
       }
-      inputField.setText("");
     } else if (c == 'd' || c == 'D') {
-      try {
-        String data = inputField.getText();
-        evt.consume(); // Not type 'd' or 'D' character in textfield
-        if (!data.isEmpty()) {
-          model.delete(Integer.parseInt(data));
+      if (!inputField.getText().trim().isEmpty()) {
+        try {
+          int data = Integer.parseInt(inputField.getText());
+          if (!model.delete(data)) {
+            JOptionPane.showMessageDialog(this, 
+                "Integer " + data + " does not exist in the tree",
+                "Value Not Found",
+                JOptionPane.INFORMATION_MESSAGE);
+          }
+          inputField.setText("");
+        } catch (NumberFormatException e) {
+          JOptionPane.showMessageDialog(this, 
+              "Please enter a valid integer!",
+              "Invalid Input",
+              JOptionPane.ERROR_MESSAGE);
         }
-        inputField.requestFocusInWindow();
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Please Enter Integer.");
       }
-      inputField.setText("");
-    } else if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
       evt.consume();
+    } else if ((c < '0' || c > '9') && c != '\b') {  // 只允许输入数字和退格键
+      evt.consume();
+    }
   }
 
   @Override
@@ -80,6 +116,10 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
 
   @Override
   public void keyReleased(KeyEvent evt) {
+  }
+
+  public void updateTreePanel(Node root) {
+    treePanel.updateTree(root);
   }
 
   private void initializeComponents() {
@@ -103,6 +143,7 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
     traversalPanel.add(preorderLabel);
     traversalPanel.add(postorderLabel);
 
+    add(treePanel, BorderLayout.CENTER);
     add(controlPanel, BorderLayout.NORTH);
     add(traversalPanel, BorderLayout.SOUTH);
   }
@@ -124,5 +165,6 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
     preorderLabel.setText("Preorder: " + preorder);
     postorderLabel.setText("Postorder: " + postorder);
   }
+
 }
 
