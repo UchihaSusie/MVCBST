@@ -1,27 +1,12 @@
-public class BSTModel {
+public class BSTModel implements BSTModelInterface{
   private Node root;
-  private BSTView view;
+  private BSTController controller;
 
-  public void setView(BSTView view) {
-    this.view = view;
+  public void setController(BSTController controller){
+    this.controller = controller;
   }
 
-  private void notifyView() {
-    if (view != null) {
-      view.updateTreePanel(root);
-      view.updateTraversal(
-        inorder(),
-        preorder(),
-        postorder()
-      );
-    }
-  }
 
-  public Node getRoot() {
-    return root;
-}
-
-  // Add node to the BST
   public boolean add(int value) {
     if (contains(value)) {
       return false;
@@ -29,27 +14,29 @@ public class BSTModel {
     
     if (root == null) {
       root = new Node(value);
-      notifyView();
+      //notifyView();
+      controller.notifyView(root);
       return true;
     }
     
     addRecursive(root, value);
-    notifyView();
+    //notifyView();
+    controller.notifyView(root);
     return true;
   }
 
   private void addRecursive(Node current, int value) {
-    if (value < current.value) {
-      if (current.left == null) {
-        current.left = new Node(value);
+    if (value < current.getValue()) {
+      if (current.getLeft() == null) {
+        current.setLeft(new Node(value));;
       } else {
-        addRecursive(current.left, value);
+        addRecursive(current.getLeft(), value);
       }
     } else {
-      if (current.right == null) {
-        current.right = new Node(value);
+      if (current.getRight() == null) {
+        current.setRight(new Node(value));
       } else {
-        addRecursive(current.right, value);
+        addRecursive(current.getRight(), value);
       }
     }
   }
@@ -61,41 +48,41 @@ public class BSTModel {
     boolean nodeExists = contains(value);
     if (nodeExists) {
       root = deleteRecursive(root, value);
-      notifyView();
+      controller.notifyView(root);
+      //notifyView();
       return true;
     }
     return false;
   }
 
   private Node deleteRecursive(Node current, int value) {
-    if (current == null) return null;
-    if (value == current.value) {
+    if (value == current.getValue()) {
       // Node to delete found
-      if (current.left == null && current.right == null) {
+      if (current.getLeft() == null && current.getRight() == null) {
         return null;
       }
-      if (current.right == null) {
-        return current.left;
+      if (current.getRight() == null) {
+        return current.getLeft();
       }
-      if (current.left == null) {
-        return current.right;
+      if (current.getLeft() == null) {
+        return current.getRight();
       }
       // Node with two children: get smallest in right subtree
-      int smallestValue = findSmallestValue(current.right);
-      current.value = smallestValue;
-      current.right = deleteRecursive(current.right, smallestValue);
+      int smallestValue = findSmallestValue(current.getRight());
+      current.setValue(smallestValue);
+      current.setRight(deleteRecursive(current.getRight(), smallestValue)); 
       return current;
     }
-    if (value < current.value) {
-      current.left = deleteRecursive(current.left, value);
+    if (value < current.getValue()) {
+      current.setLeft(deleteRecursive(current.getLeft(), value));
       return current;
     }
-    current.right = deleteRecursive(current.right, value);
+    current.setRight(deleteRecursive(current.getRight(), value)); 
     return current;
   }
 
   private int findSmallestValue(Node root) {
-    return root.left == null ? root.value : findSmallestValue(root.left);
+    return root.getLeft() == null ? root.getValue() : findSmallestValue(root.getLeft());
   }
 
   // Traversals
@@ -107,9 +94,9 @@ public class BSTModel {
 
   private void inorderTraversal(Node node, StringBuilder result) {
     if (node != null) {
-      inorderTraversal(node.left, result);
-      result.append(node.value).append(" ");
-      inorderTraversal(node.right, result);
+      inorderTraversal(node.getLeft(), result);
+      result.append(node.getValue()).append(" ");
+      inorderTraversal(node.getRight(), result);
     }
   }
 
@@ -121,9 +108,9 @@ public class BSTModel {
 
   private void preorderTraversal(Node node, StringBuilder result) {
     if (node != null) {
-      result.append(node.value).append(" ");
-      preorderTraversal(node.left, result);
-      preorderTraversal(node.right, result);
+      result.append(node.getValue()).append(" ");
+      preorderTraversal(node.getLeft(), result);
+      preorderTraversal(node.getRight(), result);
     }
   }
 
@@ -135,9 +122,9 @@ public class BSTModel {
 
   private void postorderTraversal(Node node, StringBuilder result) {
     if (node != null) {
-      postorderTraversal(node.left, result);
-      postorderTraversal(node.right, result);
-      result.append(node.value).append(" ");
+      postorderTraversal(node.getLeft(), result);
+      postorderTraversal(node.getRight(), result);
+      result.append(node.getValue()).append(" ");
     }
   }
 
@@ -150,11 +137,11 @@ public class BSTModel {
     if (current == null) {
       return false;
     }
-    if (value == current.value) {
+    if (value == current.getValue()) {
       return true;
     }
-    return value < current.value 
-        ? containsRecursive(current.left, value)
-        : containsRecursive(current.right, value);
+    return value < current.getValue()
+        ? containsRecursive(current.getLeft(), value)
+        : containsRecursive(current.getRight(), value);
   }
 }

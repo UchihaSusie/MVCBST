@@ -11,7 +11,7 @@ public class TreePanel extends JPanel {
     public TreePanel() {
         super();
         setPreferredSize(new Dimension(800, 600));
-        setBackground(Color.WHITE);
+        setBackground(Color.LIGHT_GRAY);
     }
     
     @Override
@@ -23,22 +23,22 @@ public class TreePanel extends JPanel {
     }
     
     private void drawTree(Graphics g, Node node, int x, int y, int offset) {
-        // 绘制节点
-        g.setColor(Color.WHITE);
+        // draw node circle
+        g.setColor(Color.PINK);
         g.fillOval(x - VERTEX_DIAMETER/2, y - VERTEX_DIAMETER/2, 
                    VERTEX_DIAMETER, VERTEX_DIAMETER);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.WHITE);
         g.drawOval(x - VERTEX_DIAMETER/2, y - VERTEX_DIAMETER/2, 
                    VERTEX_DIAMETER, VERTEX_DIAMETER);
         
-        // 绘制节点值
-        String value = String.valueOf(node.getData());
+        // draw node value
+        String value = String.valueOf(node.getValue());
         FontMetrics fm = g.getFontMetrics();
         int stringX = x - fm.stringWidth(value)/2;
         int stringY = y + fm.getHeight()/4;
         g.drawString(value, stringX, stringY);
         
-        // 绘制左子树
+        // draw left subtree
         if (node.getLeft() != null) {
             int childX = x - offset;
             int childY = y + VERTICAL_GAP;
@@ -46,7 +46,7 @@ public class TreePanel extends JPanel {
             drawTree(g, node.getLeft(), childX, childY, offset/2);
         }
         
-        // 绘制右子树
+        // draw right subtree
         if (node.getRight() != null) {
             int childX = x + offset;
             int childY = y + VERTICAL_GAP;

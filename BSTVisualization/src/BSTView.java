@@ -7,54 +7,59 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class BSTView extends JFrame implements ActionListener, KeyListener {
-  private JTextField inputField;
-  private JButton addButton, deleteButton;
-  private JLabel inorderLabel, preorderLabel, postorderLabel;
-
-  private BSTModel model;
+public class BSTView extends JFrame implements ActionListener, KeyListener, BSTViewInterface {
+  //private BSTModel model;
+  private BSTController controller;
   private TreePanel treePanel;
+  private ControlPanel controlPanel;
+  private TraversalPanel traversalPanel;
 
   public BSTView() {
-    treePanel = new TreePanel();  
+    treePanel = new TreePanel();
+    controlPanel = new ControlPanel();
+    traversalPanel = new TraversalPanel();
+
     setTitle("Binary Search Tree Visualization");
     setSize(800, 600);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    initializeComponents();
 
-     // 添加事件监听器
-     addButton.addActionListener(this);
-     deleteButton.addActionListener(this);
-     inputField.addKeyListener(this);
+    // set up layout
+    add(treePanel, BorderLayout.CENTER);
+    add(controlPanel, BorderLayout.NORTH);
+    add(traversalPanel, BorderLayout.SOUTH);
+
   }
 
-  public void setModel(BSTModel model) {
-    this.model = model;
+  public void setController(BSTController controller){
+    this.controller = controller;
   }
+  
+  // public void setModel(BSTModel model) {
+  //   this.model = model;
+  // }
 
   @Override
   public void actionPerformed(ActionEvent evt) {
-    if (!inputField.getText().trim().isEmpty()) {
+    if (!controlPanel.getInputField().getText().trim().isEmpty()) {
       try {
-        int data = Integer.parseInt(inputField.getText());
-        if (evt.getSource() == addButton) {
-          if (!model.add(data)) {
+        int data = Integer.parseInt(controlPanel.getInputField().getText());
+        if (evt.getSource() == controlPanel.getAddButton()) {
+          if (!controller.add(data)) {
             JOptionPane.showMessageDialog(this, 
                 "Integer " + data + " already exists, please choose another one",
                 "Duplicate Value",
                 JOptionPane.INFORMATION_MESSAGE);
-            return;
           }
-        } else if (evt.getSource() == deleteButton) {
-          if (!model.delete(data)) {
+        } else if (evt.getSource() == controlPanel.getDeleteButton()) {
+          if (!controller.delete(data)) {
             JOptionPane.showMessageDialog(this, 
                 "Integer " + data + " does not exist in the tree",
                 "Value Not Found",
                 JOptionPane.INFORMATION_MESSAGE);
           }
         }
-        inputField.setText("");
-        inputField.requestFocusInWindow();
+        controlPanel.getInputField().setText("");
+        controlPanel.getInputField().requestFocusInWindow();
       } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, 
             "Please enter a valid integer!",
@@ -68,17 +73,17 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
   public void keyTyped(KeyEvent evt) {
     char c = evt.getKeyChar();
     if (c == '\n') {  // 回车键
-      if (!inputField.getText().trim().isEmpty()) {
+      if (!controlPanel.getInputField().getText().trim().isEmpty()) {
         try {
-          int data = Integer.parseInt(inputField.getText());
-          if (!model.add(data)) {
+          int data = Integer.parseInt(controlPanel.getInputField().getText());
+          if (!controller.add(data)) {
             JOptionPane.showMessageDialog(this, 
                 "Integer " + data + " already exists, please choose another one",
                 "Duplicate Value",
                 JOptionPane.INFORMATION_MESSAGE);
             return;
           }
-          inputField.setText("");
+          controlPanel.getInputField().setText("");
         } catch (NumberFormatException e) {
           JOptionPane.showMessageDialog(this, 
               "Please enter a valid integer!",
@@ -87,16 +92,16 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
         }
       }
     } else if (c == 'd' || c == 'D') {
-      if (!inputField.getText().trim().isEmpty()) {
+      if (!controlPanel.getInputField().getText().trim().isEmpty()) {
         try {
-          int data = Integer.parseInt(inputField.getText());
-          if (!model.delete(data)) {
+          int data = Integer.parseInt(controlPanel.getInputField().getText());
+          if (!controller.delete(data)) {
             JOptionPane.showMessageDialog(this, 
                 "Integer " + data + " does not exist in the tree",
                 "Value Not Found",
                 JOptionPane.INFORMATION_MESSAGE);
           }
-          inputField.setText("");
+          controlPanel.getInputField().setText("");
         } catch (NumberFormatException e) {
           JOptionPane.showMessageDialog(this, 
               "Please enter a valid integer!",
@@ -122,48 +127,20 @@ public class BSTView extends JFrame implements ActionListener, KeyListener {
     treePanel.updateTree(root);
   }
 
-  private void initializeComponents() {
-    JPanel controlPanel = new JPanel();
-    inputField = new JTextField(10);
-    addButton = new JButton("Add");
-    deleteButton = new JButton("Delete");
-
-    controlPanel.add(new JLabel("Value:"));
-    controlPanel.add(inputField);
-    controlPanel.add(addButton);
-    controlPanel.add(deleteButton);
-
-    JPanel traversalPanel = new JPanel();
-    inorderLabel = new JLabel("Inorder: ");
-    preorderLabel = new JLabel("Preorder: ");
-    postorderLabel = new JLabel("Postorder: ");
-
-    traversalPanel.setLayout(new BoxLayout(traversalPanel, BoxLayout.Y_AXIS));
-    traversalPanel.add(inorderLabel);
-    traversalPanel.add(preorderLabel);
-    traversalPanel.add(postorderLabel);
-
-    add(treePanel, BorderLayout.CENTER);
-    add(controlPanel, BorderLayout.NORTH);
-    add(traversalPanel, BorderLayout.SOUTH);
-  }
-
-  public JTextField getInputField() {
-    return inputField;
+  public void updateTraversal(String inorder, String preorder, String postorder) {
+    traversalPanel.updateTraversal(inorder, preorder, postorder);
   }
 
   public JButton getAddButton() {
-    return addButton;
+    return controlPanel.getAddButton();
   }
 
   public JButton getDeleteButton() {
-    return deleteButton;
+    return controlPanel.getDeleteButton();
   }
 
-  public void updateTraversal(String inorder, String preorder, String postorder) {
-    inorderLabel.setText("Inorder: " + inorder);
-    preorderLabel.setText("Preorder: " + preorder);
-    postorderLabel.setText("Postorder: " + postorder);
+  public JTextField getInputField() {
+    return controlPanel.getInputField();
   }
 
 }
