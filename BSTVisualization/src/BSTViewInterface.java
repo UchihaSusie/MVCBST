@@ -1,12 +1,10 @@
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 
 /**
  * Interface for the View component in the MVC design pattern for a Binary Search Tree (BST) visualization.
  * It extends both ActionListener and KeyListener, meaning the view can handle button actions and keyboard events.
  */
-public interface BSTViewInterface extends ActionListener, KeyListener {
+public interface BSTViewInterface {
 
     // /**
     //  * Sets the model that this view interacts with.

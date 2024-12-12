@@ -8,7 +8,7 @@ import java.awt.*;
 
 
 public class BSTView extends JFrame implements ActionListener, KeyListener, BSTViewInterface {
-  //private BSTModel model;
+
   private BSTController controller;
   private TreePanel treePanel;
   private ControlPanel controlPanel;
@@ -33,10 +33,6 @@ public class BSTView extends JFrame implements ActionListener, KeyListener, BSTV
   public void setController(BSTController controller){
     this.controller = controller;
   }
-  
-  // public void setModel(BSTModel model) {
-  //   this.model = model;
-  // }
 
   @Override
   public void actionPerformed(ActionEvent evt) {

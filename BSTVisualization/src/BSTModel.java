@@ -1,3 +1,4 @@
+
 public class BSTModel implements BSTModelInterface{
   private Node root;
   private BSTController controller;
