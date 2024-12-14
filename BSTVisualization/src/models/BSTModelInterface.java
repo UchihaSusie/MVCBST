@@ -4,7 +4,11 @@ import controllers.BSTController;
 
 // Interface defining the model for a Binary Search Tree (BST)
 public interface BSTModelInterface {
-
+    /**
+     * Sets the controller that will manage communication between the model and the view.
+     *
+     * @param controller an instance of BSTController to be associated with the model
+     */
     void setController(BSTController controller);
 
     /**

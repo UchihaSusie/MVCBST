@@ -9,7 +9,12 @@ import models.Node;
  * It extends both ActionListener and KeyListener, meaning the view can handle button actions and keyboard events.
  */
 public interface BSTViewInterface {
-
+    /**
+     * Sets the controller for the View.
+     * This establishes communication between the View and the Controller in the MVC architecture.
+     *
+     * @param controller The BSTController instance to control the tree's operations.
+     */
     void setController(BSTController controller);
 
     /**
