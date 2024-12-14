@@ -1,2 +1,2 @@
 # MVCBST
-model view controoler for binary search tree visualization 
+model view controller for binary search tree visualization 
