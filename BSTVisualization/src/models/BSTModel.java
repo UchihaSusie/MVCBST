@@ -1,3 +1,6 @@
+package models;
+
+import controllers.BSTController;
 
 public class BSTModel implements BSTModelInterface{
   private Node root;
@@ -15,13 +18,11 @@ public class BSTModel implements BSTModelInterface{
     
     if (root == null) {
       root = new Node(value);
-      //notifyView();
       controller.notifyView(root);
       return true;
     }
     
     addRecursive(root, value);
-    //notifyView();
     controller.notifyView(root);
     return true;
   }
@@ -50,7 +51,6 @@ public class BSTModel implements BSTModelInterface{
     if (nodeExists) {
       root = deleteRecursive(root, value);
       controller.notifyView(root);
-      //notifyView();
       return true;
     }
     return false;

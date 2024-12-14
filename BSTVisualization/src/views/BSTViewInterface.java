@@ -1,18 +1,14 @@
+package views;
+
+import controllers.BSTController;
 import javax.swing.*;
+import models.Node;
 
 /**
  * Interface for the View component in the MVC design pattern for a Binary Search Tree (BST) visualization.
  * It extends both ActionListener and KeyListener, meaning the view can handle button actions and keyboard events.
  */
 public interface BSTViewInterface {
-
-    // /**
-    //  * Sets the model that this view interacts with.
-    //  * This links the view to the data (BST model) in the MVC structure.
-    //  *
-    //  * @param model The Binary Search Tree model.
-    //  */
-    // void setModel(BSTModel model);
 
     void setController(BSTController controller);
 

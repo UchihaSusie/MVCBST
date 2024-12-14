@@ -1,3 +1,8 @@
+package controllers;
+
+import models.BSTModel;
+import models.Node;
+import views.BSTView;
 
 public class BSTController implements BSTControllerInterface{
   private BSTModel model;
@@ -6,8 +11,6 @@ public class BSTController implements BSTControllerInterface{
   public BSTController(BSTModel model, BSTView view) {
     this.model = model;
     this.view = view;
-    //view.setModel(model);
-    //model.setView(view);
     this.view.setController(this);
     this.model.setController(this);
     view.getAddButton().addActionListener(view);

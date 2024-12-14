@@ -1,3 +1,7 @@
+package controllers;
+
+import models.Node;
+
 /**
  * Interface representing the Controller component in the MVC design pattern for a Binary Search Tree (BST) visualization.
  * The controller connects the view and model, handling user interactions and updating the model accordingly.

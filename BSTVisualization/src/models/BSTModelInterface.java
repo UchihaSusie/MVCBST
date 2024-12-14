@@ -1,11 +1,9 @@
+package models;
+
+import controllers.BSTController;
+
 // Interface defining the model for a Binary Search Tree (BST)
 public interface BSTModelInterface {
-    // /**
-    //  * Sets the view component for this model.
-    //  * 
-    //  * @param view the BSTView instance to be associated with the model
-    //  */
-    // void setView(BSTView view);
 
     void setController(BSTController controller);
 

@@ -1,12 +1,15 @@
+package views;
+
 import javax.swing.JPanel;
 import java.awt.*;
+import models.Node;
 
 public class TreePanel extends JPanel {
     private Node root;
     private final int VERTEX_DIAMETER = 30;
     private final int VERTICAL_GAP = 50;
-    private final int INITIAL_X = 400;  // 起始X坐标（屏幕中心）
-    private final int INITIAL_Y = 30;   // 起始Y坐标（顶部留空）
+    private final int INITIAL_X = 400;
+    private final int INITIAL_Y = 30;
 
     public TreePanel() {
         super();

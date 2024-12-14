@@ -1,3 +1,7 @@
+import controllers.BSTController;
+import models.BSTModel;
+import views.BSTView;
+
 public class BSTMain {
   public static void main(String[] args) {
     BSTModel model = new BSTModel();

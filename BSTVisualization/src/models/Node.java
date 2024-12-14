@@ -1,3 +1,5 @@
+package models;
+
 // Node class represents a node in a binary tree
 public class Node {
 
